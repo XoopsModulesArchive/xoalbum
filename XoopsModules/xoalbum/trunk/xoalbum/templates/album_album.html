@@ -1,0 +1,132 @@
+<{includeq file="db:album_header.html"}>
+<{if !$accessperm}>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#dialogbox").dialog("option","closeOnEscape",false);
+        $("#dialogbox").dialog("option","title","没有访问权限");
+        $("#dialogbox").dialog(
+            "option", 
+            "buttons",{ "返回": historyfunc }
+        );
+        $("#dialogbox").html("抱歉！您没有访问这个相册的权限。").dialog("open");
+    });
+</script>
+<{/if}>
+
+<div class="xo-album">
+    <div class="xo-album-info ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <div class="xo-album-cover ui-widget ui-widget-content ui-corner-all"><div><img id="album-cover-image" src="<{$album.cover}>" alt=""/> </div></div>
+        <div><a href="album.php?albumId=<{$album.album_id}>"><strong><{$album.album_name}></strong></a> <small>(<{$album.album_total}>)</small></div>
+        <{if $album.album_desc}><div><{$album.album_desc}></div><{/if}>
+        <div><small><{$album.album_dateline}></small> </div>
+        <div><small><{$smarty.const._ALBUM_CATEGORY}> <a href="category.php?catId=<{$album.cat_id}>"><{$album.cat_name}></a></small></div>
+        <{if $xoops_userid eq $album.uid}>
+        <div>
+            <a href="ajax.php?op=album&amp;ac=edit&amp;albumId=<{$album.album_id}>" class="dialog">修改</a> | 
+            <a href="ajax.php?op=album&amp;ac=delete&amp;albumId=<{$album.album_id}>" class="dialog">删除</a>
+        </div>
+        <{/if}>
+        <div class="xo-album-clearfix"></div>
+        <div class="userbox">
+            <ul class="li-menu-nav">
+                <{if $album}>
+                <li>
+                    <a href="upload.php?albumId=<{$album.album_id}>">上传图片</a>
+                </li>
+                <{/if}>
+                <{if $my_albums}>
+                <li>
+                    <a href="category.php?uid=<{$xoops_userid}>">我的相册</a>
+                    <dl class=" ui-tabs ui-widget ui-widget-content ui-corner-all">
+                        <{foreachq item=item from=$my_albums}>
+                        <dd><a href="album.php?albumId=<{$item.album_id}>"><{$item.album_name}></a> <small>(<{$item.album_total}>)</small></dd>
+                        <{/foreach}>
+                    </dl>
+                </li>
+                <{/if}>
+                <li><a href="ajax.php?op=album&amp;ac=create" class="dialog">创建相册</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="xo-album-box ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <div id="album-left" class="xo-album-left">
+            <{if $albums_cat}>
+            <h3>同类相册</h3>
+            <ul>
+                <{foreach item=item from=$albums_cat}>
+                <li>
+                    <div class="cover"><{$item.album_cover}></div>
+                    <div><a href="album.php?albumId=<{$item.album_id}>"><{$item.album_name}></a><small>(<{$item.album_total}>)</small></div>
+                    <em><{$item.album_status}></em>
+                </li>
+                <{/foreach}>
+            </ul>
+            <{/if}>
+            
+            <{if $albums_user}>
+            <h3>同人相册</h3>
+            <ul>
+                <{foreach item=item from=$albums_user}>
+                <li>
+                    <div class="cover"><{$item.album_cover}></div>
+                    <div><a href="album.php?albumId=<{$item.album_id}>"><{$item.album_name}></a><small>(<{$item.album_total}>)</small></div>
+                    <em><{$item.album_status}></em>
+                </li>
+                <{/foreach}>
+            </ul>
+            <{/if}>
+            
+            <{if $op }>
+            
+            <h3>图片</h3>
+            <div class="xo-album-nav">
+                <dl>
+                    <{foreach item=item from=$pictures}>
+                        <dd>
+                            <div class="thumb <{if $picture.pic_id eq $item.pic_id}> current<{/if}>">
+                                <a href="album.php?albumId=<{$album.album_id}>&amp;picId=<{$item.pic_id}>"><{$item.thumb}></a>
+                            </div>
+                        </dd>
+                    <{/foreach}>
+                </dl>
+            </div>
+            <{/if}>
+        </div>
+        
+        <div class="xo-album-right">
+            <{if $op }>
+                <{includeq file="db:album_detail.html"}>
+            <{else}>
+                <div class="xo-picture-list">
+                    <{if $pictures}>
+                        <form name="<{$coverfrm.name}>" id="<{$coverfrm.name}>" action="<{$coverfrm.action}>" method="<{$coverfrm.method}>">
+                        <ul id="albumlist">
+                        <{foreach item=item from=$pictures}>
+                            <li id="picturebox_<{$item.pic_id}>">
+                                <div class="thumb"><a href="album.php?albumId=<{$item.album_id}>&amp;picId=<{$item.pic_id}>"><{$item.thumb}></a></div>
+                                <span><a href="album.php?albumId=<{$item.album_id}>&amp;picId=<{$item.pic_id}>" title="<{$item.pic_name}>"><{$item.pic_name}></a></span>
+                                <{if $xoops_userid eq $album.uid}>
+                                <address>
+                                    <cite><input type="radio" name="album_cover" value="<{$item.pic_id}>" />封面</cite>
+                                    <a href="ajax.php?op=picture&amp;ac=edit&amp;albumId=<{$item.album_id}>&amp;picId=<{$item.pic_id}>" class="dialog">编辑</a>
+                                    <a href="ajax.php?op=picture&amp;ac=delete&amp;albumId=<{$item.album_id}>&amp;picId=<{$item.pic_id}>" class="dialog">删除</a>
+                                </address>
+                                <{/if}>
+                            </li>
+                        <{/foreach}>
+                        </ul>
+                        <{foreachq item=item from=$coverfrm.elements}>
+                        	<{if $item.hidden}><{$item.body}><{/if}>
+                        <{/foreach}>
+                        </form>
+                    <{/if}>
+                    <div class="xo-album-clearfix"></div>
+                    <{$pagenav}>
+                </div>
+            <{/if}>
+        </div>
+        <div class="xo-album-clearfix"></div>
+    </div>
+    
+</div>

@@ -1,0 +1,15 @@
+<{assign var="nn" value="0"}>
+<{assign var="vv" value="5"}>
+<table width="100%" cellspacing="0">
+    <{foreachq item=item from=$block name="list"}>
+    <{if $nn++%$vv eq 0}><tr><{/if}>
+        <td width="20%" style="padding: 3px 0;" align="center">
+        <div style="height: 100px; width: 100px; padding: 3px 0; display: table-cell; vertical-align: middle; text-align: center;">
+        <a href="<{$xoops_url}>/modules/xoalbum/view.php?picId=<{$item.pic_id}>" title="<{$item.pic_name}>"><{$item.thumb}></a>
+        </div>
+        <div><small><a href="<{$xoops_url}>/modules/xoalbum/album.php?albumId=<{$item.album_id}>">[<{$item.album_name}>]</a> <a href="<{$xoops_url}>/modules/xoalbum/view.php?picId=<{$item.pic_id}>"><{$item.pic_name}></a></small></div>
+        </td>
+        <{if $smarty.foreach.list.last AND $nn%$vv neq 0}><td colspan="<{$nn-$nn%$vv}>">&nbsp;</td><{/if}>
+    <{if $nn%$vv eq 0}></tr><{/if}>
+    <{/foreach}>
+</table>

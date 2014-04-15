@@ -1,0 +1,47 @@
+<table width="100%">
+    <tr>
+       
+        <td width="65%" valign="top">
+            <table class="outer">
+                <tr>
+                    <th><{$smarty.const._AM_CATEGORY_NAME}></th>
+                    <th><{$smarty.const._AM_CATEGORY_ORDER}></th>
+                    <th><{$smarty.const._AM_CREATE_DATE}></th>
+                    <th><{$smarty.const._AM_OPERATION}></th>
+                </tr>
+                <{foreachq item=item from=$categories}>
+                <tr class="<{cycle values='odd, even'}>">
+                    <td><a href="album.php?catId=<{$item.cat_id}>"><{$item.cat_name}></a><small>(<{$item.cat_amount}>)</small></td>
+                    <td align="center"><{$item.cat_order}></td>
+                    <td align="center"><{$item.cat_dateline}></td>
+                    <td align="center">
+                    <a href="category.php?cat_id=<{$item.cat_id}>"><{$smarty.const._EDIT}></a> | 
+                    <a href="action.category.php?op=delete&amp;cat_id=<{$item.cat_id}>"><{$smarty.const._DELETE}></a></td>
+                </tr>
+                <{/foreach}>
+            </table>
+        </td>
+        
+         <td width="35%" valign="top">
+            <form name="<{$form.name}>" id="<{$form.name}>" action="<{$form.action}>" method="<{$form.method}>">
+            <table class="outer">
+            	<tr class="head">
+            		<th colspan="2"><{$smarty.const._AM_CATEGORY}></th>
+            	</tr>
+            	<{foreachq item=item from=$form.elements}>
+            	<{if !$item.hidden}>
+            	<tr>
+            		<td class="even"><{$item.caption}><{if $item.required}><em>*</em><{/if}></td>
+            		<td class="odd"><{$item.body}></td>
+            	</tr>
+            	<{else}>
+            	<{$item.body}>
+            	<{/if}>
+            	<{/foreach}>
+            </table>
+            </form>
+        </td>
+    </tr>
+</table>
+
+

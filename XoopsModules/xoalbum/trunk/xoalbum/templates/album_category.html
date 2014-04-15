@@ -1,0 +1,60 @@
+<{includeq file="db:album_header.html"}>
+<div class="xo-album">
+    <div class="xo-album-info ui-tabs ui-widget ui-widget-content ui-corner-all" style="height: 30px; border: 0;">
+        <div class="userbox">
+            <ul class="li-menu-nav">
+                <{if $my_albums}>
+                <li>
+                    <a href="category.php?uid=<{$xoops_userid}>">我的相册</a>
+                    <dl class=" ui-tabs ui-widget ui-widget-content ui-corner-all">
+                        <{foreachq item=item from=$my_albums}>
+                        <dd><a href="album.php?albumId=<{$item.album_id}>"><{$item.album_name}></a> <small>(<{$item.album_total}>)</small></dd>
+                        <{/foreach}>
+                    </dl>
+                </li>
+                <{/if}>
+                <li><a href="ajax.php?op=album&amp;ac=create" class="dialog">创建相册</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="xo-album-box ui-tabs ui-widget ui-widget-content ui-corner-all">
+        
+        <div class="xo-album-left category" id="album-left" >
+            <h3><{$smarty.const._ALBUM_CATEGORY}></h3>
+            <ul>
+                <{foreachq item=item from=$categories}>
+                <li><a href="category.php?catId=<{$item.cat_id}>"><{$item.cat_name}></a><small>(<{$item.cat_total}>)</small></li>
+                <{/foreach}>
+            </ul>
+        </div>
+        
+        <div class="xo-album-right">
+            <div class="xo-album-list">
+                <{if $albums}>
+                <ul id="albumlist">
+                    <{foreachq item=item from=$albums name="list"}>
+                    <li id="albumbox_<{$item.album_id}>">
+                        <div class="thumb ui-widget ui-widget-content ui-corner-all"><div><a href="album.php?albumId=<{$item.album_id}>"><{$item.cover}></a></div></div>
+                        <div class="name"><a href="album.php?albumId=<{$item.album_id}>"><{$item.album_name}>(<{$item.album_total}>)</a> [<{$item.state}>]</div>
+                        <{if $xoops_userid eq $item.uid}>
+                        <address>
+                            <a href="ajax.php?op=album&amp;ac=edit&amp;albumId=<{$item.album_id}>" class="dialog">修改</a>
+                            <a href="ajax.php?op=album&amp;ac=delete&amp;albumId=<{$item.album_id}>" class="dialog">删除</a>
+                        </address>
+                        <{/if}>
+                    </li>
+                    <{/foreach}>
+                </ul>
+                <{else}>
+                    <{$smarty.const._ALBUM_CATEGORY_NO_ALBUM}>
+                <{/if}>
+            </div>
+        </div>
+        
+        <div class="xo-album-clearfix"></div>
+    </div>
+    
+</div>    
+
+

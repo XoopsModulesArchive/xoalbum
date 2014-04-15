@@ -1,0 +1,119 @@
+<{includeq file="db:album_header.html"}>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("div.navthumb > a").hover(
+            function(){
+                var n = $("div.navthumb > a").length;
+                var c;
+                var obj = $("div.navthumb > a");
+                obj.removeClass("hover");
+                $(this).addClass("hover");
+                for ( i=1; i<=n; i++) {
+                    if ( $(this).attr("href") == obj.eq(i-1).attr("href") ) {
+                        c = i-1;   continue;
+                    }
+                }
+                $("div#navthumbval").text(c);
+                slideviewer();
+            },
+            function(){
+//                $(this).removeClass("hover");
+            }
+        );
+        $("div.navthumb > a").click(function(){
+            return false;
+        });
+        setInterval(slideviewer,5000);
+    });
+    var slideviewer = function(){
+        var n = $("div.navthumb > a").length*1;
+        var v = $("div#navthumbval").text()*1;
+        if ( !v || v >=n ) { v = 0;}
+        $("div.navthumb > a").removeClass("hover");
+        $("div.navthumb > a").eq(v).addClass("hover");
+        $("div#navthumbval").text(v+1);
+        v = v*360;
+        $("#slideimages > ul").css({"top": "-"+v+"px"});
+    }
+</script>
+
+<div class="xo-album">
+    <div class="xo-album-info ui-tabs ui-widget ui-widget-content ui-corner-all" style="height: 30px; border: 0;">
+        <div class="userbox">
+            <ul class="li-menu-nav">
+                <{if $my_albums}>
+                <li>
+                    <a href="category.php?uid=<{$xoops_userid}>">我的相册</a>
+                    <dl class=" ui-tabs ui-widget ui-widget-content ui-corner-all">
+                        <{foreachq item=item from=$my_albums}>
+                        <dd><a href="album.php?albumId=<{$item.album_id}>"><{$item.album_name}></a> <small>(<{$item.album_total}>)</small></dd>
+                        <{/foreach}>
+                    </dl>
+                </li>
+                <{/if}>
+                <li><a href="ajax.php?op=album&amp;ac=create" class="dialog">创建相册</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="xo-album-box ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <div class="xo-index-left" style="float:left; width: 480px;">
+            <div id="slideimages" class="slideimages">
+                <ul>
+                <{foreachq item=item from=$pictures}>
+                    <li id="PicId<{$item.pic_id}>">
+                        <a href="album.php?albumId=<{$item.album_id}>&amp;picId=<{$item.pic_id}>"><img src="<{$item.image}>" alt="" /></a>
+                    </li>
+                <{/foreach}>
+                </ul>
+                <div class="navthumb">
+                    <{foreachq item=item from=$pictures}>
+                        <a href="#PicId<{$item.pic_id}>"><img src="<{$item.thumb}>" alt="" /></a>
+                    <{/foreach}>
+                    <div id="navthumbval" style="display:none;">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="xo-index-right" style="float: left; width: 360px; padding: 0 10px;margin-left: 5px;">
+            <div style="height: 240px; line-height: 20px; " >
+                <h4>相册 (xoAlbum2.0.0)</h4>
+                <ul>
+                    <li>1. 基于XOOPS2.3开发</li>
+                    <li>2. 支持图片批量上传</li>
+                    <li>3. 实现图片上的圈图功能</li>
+                    <li>4. 集成了JQurey UI</li>
+                    <li>4. 即将发布，敬请期待...</li>
+                </ul>
+                <strong>Bugs</strong>
+                <ul>
+                    <li>1. 圈图功能在IE6下,输入框无法输入</li>
+                    <li>2. Chrome下有个JQurey UI兼容题问</li>
+                </ul>
+                <div style="text-align: right; font-weight: bold; padding: 5px 10px;">
+                    <a href="http://code.google.com/p/xoalbum/issues/list">报告问题</a>&nbsp;&nbsp;
+                    <a href="http://xoalbum.googlecode.com/svn/trunk/" title="http://xoalbum.googlecode.com/svn/trunk/">SVN地址</a>
+                </div>
+            </div>
+            <div class="catenav">
+                <ul>
+                <{foreachq item=item from=$hotalbums}>
+                    <li><a href="album.php?albumId=<{$item.album_id}>" title="<{$item.album_name}>(<{$item.album_total}>)"><img src="<{$item.cover}>" alt="<{$item.album_name}>" /></a></li>
+                <{/foreach}>
+                </ul>
+            </div>
+            <div style="line-height: 18px;">
+            <{assign var="n" value="1"}>
+            <{foreachq item=item from=$categories}>
+                <a href="category.php?catId=<{$item.cat_id}>"><{$item.cat_name}>(<{$item.cat_total}>)</a> <{if $n++%5 eq 0}><br /><{/if}>
+            <{/foreach}>
+            </div>
+        </div>
+        
+        <div class="xo-album-clearfix"></div>
+    </div>
+    
+</div>    
+
+

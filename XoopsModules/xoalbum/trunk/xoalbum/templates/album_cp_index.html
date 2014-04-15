@@ -1,0 +1,40 @@
+<{assign var="n" value="0"}>
+<{assign var="v" value="5"}>
+<table width="100%">
+    <tr>
+        <td width="80%" valign="top">
+            <div style="padding: 0 5px;">
+                <table width="100%" cellspacing="0" class="outer">
+                    <tr class="head">
+                        <th><{$smarty.const._AM_STATISTICS}></th>
+                    </tr>
+                </table>
+                <br />
+                <table width="100%" cellspacing="0" class="outer">
+                    <tr class="head">
+                        <th colspan="<{$v}>"><{$smarty.const._AM_ALBUM_NEW_PICTURE}></th>
+                    </tr>
+                    <{foreachq item=item from=$new_pictures name="list"}>
+                    <{if $n++%$v eq 0}><tr  class="<{cycle values='odd, even'}>"><{/if}>
+                        <td width="20%" style="padding: 3px 0;" align="center">
+                        <div style="height: 100px; width: 100px; padding: 3px 0; display: table-cell; vertical-align: middle; text-align: center;">
+                        <a href="../view.php?picId=<{$item.pic_id}>" title="<{$item.pic_name}>" target="_blank"><{$item.thumb}></a>
+                        </div>
+                        <div><small><a href="../album.php?albumId=<{$item.album_id}>" target="_blank">[<{$item.album_name}>]</a> <a href="../view.php?picId=<{$item.pic_id}>" target="_blank"><{$item.pic_name}></a></small></div>
+                        </td>
+                        <{if $smarty.foreach.list.last AND $n%$v neq 0}><td colspan="<{$n-$n%$v}>">&nbsp;</td><{/if}>
+                    <{if $n%$v eq 0}></tr><{/if}>
+                    <{/foreach}>
+                </table>
+            </div>
+        </td>
+        <td width="20%" valign="top">
+            <div><strong><{$smarty.const._AM_CATEGORY_NAME}></strong></div>
+            <ul>
+            <{foreachq item=item from=$categories}>
+                <li><a href="album.php?catId=<{$item.cat_id}>"><{$item.cat_name}></a><small>(<{$item.cat_amount}>)</small></li>
+            <{/foreach}>
+            </ul>
+        </td>
+    </tr>
+</table>

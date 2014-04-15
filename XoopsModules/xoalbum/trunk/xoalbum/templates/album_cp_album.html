@@ -1,0 +1,56 @@
+<div class="head">
+    <{foreachq item=item key=key from=$categories name="list"}>
+        <{if !$smarty.foreach.list.first}><a href="album.php?catId=<{$key}>"><{$item}></a> &nbsp;<{/if}>
+    <{/foreach}>
+</div>
+<table width="100%">
+    <tr>
+        <td width="65%" valign="top">
+            <table class="outer">
+                <tr>
+                    <th><{$smarty.const._AM_ALBUM_COVER}></th>
+                    <th><{$smarty.const._AM_ALBUM_NAME}></th>
+                    <th><{$smarty.const._AM_ALBUM_VIEWS}></th>
+                    <th><{$smarty.const._AM_ALBUM_STATE}></th>
+                    <th><{$smarty.const._AM_CREATE_DATE}></th>
+                    <th><{$smarty.const._AM_OPERATION}></th>
+                </tr>
+                <{foreachq item=item from=$albums}>
+                <tr class="<{cycle values='odd, even'}>">
+                    <td align="center"><{$item.cover}><br /><small>(<a href="album.php?catId=<{$item.cat_id}>"><{$item.cat_name}></a>)</small></td>
+                    <td><a href="picture.php?albumId=<{$item.album_id}>"><{$item.album_name}></a><small>(<{$item.album_amount}>)</small><br/><{$item.name}></td>
+                    <td align="center"><{$item.album_views}></td>
+                    <td align="center"><{$item.state}></td>
+                    <td align="center"><{$item.album_dateline}></td>
+                    <td align="center">
+                    <a href="picture.php?albumId=<{$item.album_id}>"><{$smarty.const._AM_PICTURE}></a> | 
+                    <a href="album.php?albumId=<{$item.album_id}>"><{$smarty.const._EDIT}></a> | 
+                    <a href="action.album.php?op=delete&amp;album_id=<{$item.album_id}>"><{$smarty.const._DELETE}></a></td>
+                </tr>
+                <{/foreach}>
+            </table>
+            <{$pagenav}>
+        </td>
+         <td width="35%" valign="top">
+            <form name="<{$form.name}>" id="<{$form.name}>" action="<{$form.action}>" method="<{$form.method}>">
+            <table class="outer">
+            	<tr class="head">
+            		<th colspan="2"><{$smarty.const._AM_CATEGORY}></th>
+            	</tr>
+            	<{foreachq item=item from=$form.elements}>
+            	<{if !$item.hidden}>
+            	<tr>
+            		<td class="even"><{$item.caption}><{if $item.required}><em>*</em><{/if}></td>
+            		<td class="odd"><{$item.body}></td>
+            	</tr>
+            	<{else}>
+            	<{$item.body}>
+            	<{/if}>
+            	<{/foreach}>
+            </table>
+            </form>
+        </td>
+    </tr>
+</table>
+
+
