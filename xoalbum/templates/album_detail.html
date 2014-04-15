@@ -1,0 +1,126 @@
+<script type="text/javascript">
+    var preview = function(img, selection) {
+       var scaleX = 100 / (selection.width || 1); 
+       var scaleY = 100 / (selection.height || 1); 
+        $('#x1').val(selection.x1);
+        $('#y1').val(selection.y1);
+        $('#x2').val(selection.x2);
+        $('#y2').val(selection.y2);
+        $('#w').val(selection.width);
+        $('#h').val(selection.height); 
+        if ( selection.width > 0 && selection.height > 0 ) {
+            $("#createuname").css({
+                "position":"absolute",
+                "z-index":"99",
+                "left": selection.x1 + "px",
+                "top": selection.y1+selection.height  + "px"
+            }).show();
+        } else {
+            $("#createuname").hide();
+        }
+    }
+    
+    var showResponse = function(jsonData,status,jqForm) {
+        alert(jsonData.message);
+        if ( jsonData.status == "200" ) {
+            $("#grid_title").val("");
+            location.reload() ;
+        }
+    }
+    $(document).ready(function () { 
+        $('#currentpicture').imgAreaSelect({ 
+               minWidth: 40, 
+               minHeight: 40 ,
+               aspectRatio: '1:1', 
+               handles:true, 
+               onSelectChange: preview 
+        }); 
+        
+        var options = {
+            success:       showResponse,  // post-submit callback 
+            dataType:	   "json"
+        }; 
+    	$("form[id=gridfrm]").submit(function() {
+    	    if ( !$.trim($("#grid_title").val()) ) {
+    	        alert("抱歉，你还没有填写人或是物名称。");
+    	    } else {
+    		  $(this).ajaxSubmit(options);
+    	    }
+    		return false;
+    	});
+    	
+    	$("span[id=gridbox] > a ").click(function(){
+    	    return false;
+    	});
+    	
+    	$("span[id=gridbox] > a ").hover(
+    	   function(){
+    	       $($(this).attr("href")).css({"border":"2px solid #ff0000"});
+    	   },
+    	   function(){
+    	       $($(this).attr("href")).css({"border":"0"});
+    	   }
+    	);
+    });
+</script>
+<div class="ui-widget" style="margin-top: 10px;">
+	<div class="ui-state-error ui-corner-all" style="padding: 5px 10px;"> 
+		<strong>提示：</strong> 用鼠标拖动下图的图片，填写被圈的人或是物。
+	</div>
+</div>
+<div class="xo-album-img">
+    <form name="<{$gridfrm.name}>" id="<{$gridfrm.name}>" action="<{$gridfrm.action}>" method="<{$gridfrm.method}>">
+        <div class="picture">
+            <{foreachq item=item from=$picture.grids}>
+			    <div id="grid_id_<{$item.id}>" style="<{$item.style}>"><{$item.grid_title}></div>
+			<{/foreach}>
+            <img id="currentpicture" src="<{$picture.picture}>" alt="" /> 
+            <div id="createuname" class="createuser" style="display:none">
+                <{$gridfrm.elements.grid_title.body}><button type="submit">Save</button>
+            </div>
+        </div>
+        <{foreachq item=item from=$gridfrm.elements}>
+        	<{if $item.hidden}><{$item.body}><{/if}>
+        <{/foreach}>
+    </form>
+</div>
+<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" style="padding: 5px 10px;">
+	<strong>圈圈:</strong> 
+	<{foreachq item=item from=$picture.grids}>
+	    <span id="gridbox"> &nbsp; [<a href="#grid_id_<{$item.id}>"><{$item.grid_title}></a>] </span>
+	<{/foreach}>
+</div>
+<div class="xo-pinture-info">
+    <div id="tabs">
+		<ul>
+			<li><a href="#tabs-1">图片信息</a></li>
+			<li><a href="#tabs-2">待审核圈圈</a></li>
+			<li><a href="#tabs-3">拍摄信息</a></li>
+			<li><a href="#tabs-4">管理</a></li>
+		</ul>
+		<div id="tabs-1">
+            <div><strong><{$picture.pic_name}></strong></div>
+            <{if $picture.pic_desc}><div><{$picture.pic_desc}></div><{/if}>
+            <div><{$smarty.const._ALBUM_DATE}> <{$picture.pic_dateline}></div>
+            <div><{$smarty.const._ALBUM_PICTURE_SIZE}> <{$picture.pic_size}></div>
+            <div><a href="download.php?picId=<{$picture.pic_id}>">下载原图</a> <small>(10)</small></div>
+            
+            <br />
+            <div class="ui-widget">
+    			<div class="ui-state-highlight ui-corner-all" style="padding: 5px 10px;"> 
+    				<strong><{$smarty.const._ALBUM_COMMENTS}> (<{$picture.pic_comments}>)</strong>
+    			</div>
+    		</div>
+		</div>
+		<div id="tabs-2">
+		
+		</div>
+		<div id="tabs-3">
+		
+		</div>
+		<div id="tabs-4">
+		
+		</div>
+	</div>
+    
+</div>

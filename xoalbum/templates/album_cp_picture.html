@@ -1,0 +1,60 @@
+<table width="100%">
+    <tr>
+        <td width="10%"><div id="albumCover"><{$album.cover}></div></td>
+        <td>
+            <div><a href="album.php?albumId=<{$album.album_id}>"><strong><{$album.album_name}></strong></a> <small>(<{$album.album_amount}>)</small></div>
+            <div><small><{$album.album_dateline}></small></div>
+            <div><small><{$smarty.const._AM_CATEGORY}> <a href="album.php?catId=<{$album.cat_id}>"><{$album.cat_name}></a></small> <{$smarty.const._AM_ALBUM_STATE}> <{$album.state}></div>
+            <div><a href="album.php?albumId=<{$album.album_id}>"><{$smarty.const._EDIT}></a></div>
+        </td>
+    </tr>
+</table>
+<br />
+<table width="100%">
+    <tr>
+        <td width="80%" valign="top">
+            <table class="outer">
+                <tr class="head">
+                    <th width="10%"><{$smarty.const._AM_ALBUM_COVER}></th>
+                    <th><{$smarty.const._AM_ALBUM_NAME}></th>
+                    <th><{$smarty.const._AM_CREATE_DATE}></th>
+                    <th><{$smarty.const._AM_OPERATION}></th>
+                </tr>
+                <{foreachq item=item from=$pictures}>
+                <tr class="<{cycle values='odd, even'}>">
+                    <td align="center"><{$item.thumb}><br/><small><a href="picture.php?albumId=<{$item.album_id}>"><{$item.album_name}></a></small></td>
+                    <td valign="top"><{$item.pic_name}><br/><small>(<{$item.pic_size}>)</small><br/><{$item.name}>
+                    <div><a href="comments.php?picId=<{$item.pic_id}>"><{$smarty.const._AM_ALBUM_COMMENTS}></a><small>(<{$item.pic_comments}>)</small></div>
+                    </td>
+                    <td align="center"><{$item.pic_dateline}></td>
+                    <td align="center">
+                    <a href="action.album.php?op=delete&amp;picId=<{$item.pic_id}>"><{$smarty.const._DELETE}></a></td>
+                </tr>
+                <{/foreach}>
+            </table>
+            <{$pagenav}>
+        </td>
+        <td width="20%" valign="top">
+             <table class="outer">
+                <tr class="head">
+                    <th><{$smarty.const._AM_OTHER_ALBUM_NAME}></th>
+                </tr>
+                <{foreachq item=item from=$albums}>
+                <tr class="<{cycle values='odd, even'}>">
+                    <td><a href="picture.php?albumId=<{$item.album_id}>"><{$item.album_name}></a><small>(<{$item.album_amount}>)</small></td>
+                </tr>
+                <{/foreach}>
+             </table>
+             <table class="outer">
+                <tr class="head">
+                    <th><{$smarty.const._AM_CATEGORY}></th>
+                </tr>
+                <{foreachq item=item key=key from=$categories name="list"}>
+                <tr class="<{cycle values='odd, even'}>">
+                    <td><a href="album.php?catId=<{$key}>"><{$item}></a></td>
+                </tr>
+                <{/foreach}>
+             </table>
+        </td>
+    </tr>
+</table>

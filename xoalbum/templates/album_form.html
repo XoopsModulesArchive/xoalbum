@@ -1,0 +1,15 @@
+<form name="<{$form.name}>" id="<{$form.name}>" action="<{$form.action}>" method="<{$form.method}>">
+<table width="100%">
+	<{foreachq item=item from=$form.elements}>
+	<{if !$item.hidden}>
+	<tr>
+		<td valign="top"><div style="padding: 3px;"><{$item.caption}></div></td>
+		<td><div style="padding: 3px;"><{$item.body}></div></td>
+	</tr>
+	<{/if}>
+	<{/foreach}>
+</table>
+    <{foreachq item=item from=$form.elements}>
+    	<{if $item.hidden}><{$item.body}><{/if}>
+    <{/foreach}>
+</form>
